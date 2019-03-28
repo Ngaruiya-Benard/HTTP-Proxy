@@ -1,8 +1,8 @@
 /**************************************************************************
  *
  *Benard Ngaruiya bngaru01
- *Comp112
- *Web proxy assignment 1
+ *
+ *HTTP proxy server
  *
  *
  *************************************************************************/
@@ -455,66 +455,3 @@ int getLeastAccessed(cache *currCache){
 
 
 
-
-
-
-
-
-
-(142)
-if(FD_ISSET(mastersockfd, &readfds)) {
-printf("g\n");
-                    if((newsocket = accept(mastersockfd, 
-                        (struct sockaddr*) &serv_addr, (socklen_t*) &clilen))<0)
-                        error("ERROR on accepting");
-                    else
-                        printf("something has connected\n");
-
-                        printf("New connection , socket fd is %d , ip is : %s , port : %d \n" , newsocket , inet_ntoa(serv_addr.sin_addr) , ntohs 
-                            (serv_addr.sin_port)); 
-
-
-
-                    if( send(newsocket, connection_message, strlen(connection_message), 0) != strlen(connection_message) )   
-                    {   
-                        error("ERROR on sending welcome message");   
-                }   
-
-
-                puts("welcome Message has been successfully sent");
-
-
-                for(int i = 0; i < list_size; i++)
-                {
-                    if(compare_structs(client_list[i], emptyClient)){
-                        client_list[i] = new_client(NULL, newsocket);
-                        printf("We've added a new line to the socket");
-
-                        break;
-                    }
-                }
-
-                for(int i = 0; i < list_size; i++) {
-                    sd = client_list[i].sockfd;
-
-                    if(FD_ISSET(sd, &readfds)) {
-                        if ((valread = read( sd , buffer, 1024)) == 0)   
-                            {   
-                                    //Somebody disconnected , get his details and print  
-                                    getpeername(sd , (struct sockaddr*)&serv_addr ,
-                                    (socklen_t*)&clilen);   
-                                    printf("Host disconnected , ip %s , port %d \n" ,  
-                                    inet_ntoa(serv_addr.sin_addr) , ntohs(serv_addr.sin_port));
-
-                                    close(sd);
-                                    client_list[i] = emptyClient; 
-
-                                }
-
-                                else
-                                {
-                                    buffer[valread] = '\0';
-                                    send(sd, buffer, strlen(buffer), 0);
-                                }
-                    }
-                }
